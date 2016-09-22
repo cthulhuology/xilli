@@ -1,0 +1,290 @@
+.\" 
+.\" $XFree86: xc/lib/apple/WindowsWM.man,v 1.2 2003/09/16 00:36:08 torrey Exp $
+.\" 
+.\" Copyright (c) 2002 Apple Computer, Inc. All Rights Reserved.
+.\" Copyright (c) 2003 Torrey T. Lyons. All Rights Reserved.
+.\" Copyright (c) 2008 Yaakov Selkowitz, All Rights Reserved.
+.\" 
+.\" Permission is hereby granted, free of charge, to any person obtaining a
+.\" copy of this software and associated documentation files (the
+.\" "Software"), to deal in the Software without restriction, including
+.\" without limitation the rights to use, copy, modify, merge, publish,
+.\" distribute, sub license, and/or sell copies of the Software, and to
+.\" permit persons to whom the Software is furnished to do so, subject to
+.\" the following conditions:
+.\" 
+.\" The above copyright notice and this permission notice (including the
+.\" next paragraph) shall be included in all copies or substantial portions
+.\" of the Software.
+.\" 
+.\" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+.\" OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+.\" MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+.\" IN NO EVENT SHALL PRECISION INSIGHT AND/OR ITS SUPPLIERS BE LIABLE FOR
+.\" ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+.\" TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+.\" SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+.\" 
+.\" .de TQ
+.\" .br
+.\" .ns
+.\" .TP \\$1
+.\" ..
+.\" 
+.TH "WINDOWSWM" "3" "Version 1.0" "XFree86" ""
+.SH "NAME"
+WindowsWM \- Cygwin/X rootless window management extension.
+.SH "SYNTAX"
+\&#include <X11/extensions/windowswm.h>
+.nf    
+.sp
+Bool XWindowsWMQueryExtension \^(\^Display *\fIdpy\fP, 
+        int *\fIevent_base\fP, int *\fIerror_base\fP\^);
+.sp
+Status XWindowsWMQueryVersion \^(\^Display *\fIdpy\fP, int *\fImajorVersion\fP, 
+        int *\fIminorVersion\fP, int *\fIpatchVersion\fP\^);
+.sp
+Bool XWindowsWMDisableUpdate \^(\^Display *\fIdpy\fP, int \fIscreen\fP\^);
+.sp
+Bool XWindowsWMReenableUpdate \^(\^Display *\fIdpy\fP, int \fIscreen\fP\^);
+.sp
+Bool XWindowsWMSelectInput \^(\^Display *\fIdpy\fP, unsigned long \fImask\fP\^);
+.sp
+Bool XWindowsWMSetFrontProcess \^(\^Display *\fIdpy\fP\^);
+.sp
+Bool XWindowsWMFrameGetRect \^(\^Display *\fIdpy\fP,
+        unsigned int \fIframe_style\fP,
+        unsigned int \fIframe_style_ex\fP,
+        unsigned int \fIframe_rect\fP,
+        short \fIinner_x\fP, short \fIinner_y\fP,
+        short \fIinner_w\fP, short \fIinner_h\fP,
+        short *\fIret_x\fP, short *\fIret_y\fP,
+        short *\fIret_w\fP, short *\fIret_h\fP\^);
+.sp
+Bool XWindowsWMFrameDraw \^(\^Display *\fIdpy\fP, int \fIscreen\fP,
+        Window \fIwindow\fP,
+        unsigned int \fIframe_style\fP,
+        unsigned int \fIframe_style_ex\fP,
+        short \fIinner_x\fP, short \fIinner_y\fP,
+        short \fIinner_w\fP, short \fIinner_h\fP\^);
+.sp
+Bool XWindowsWMFrameSetTitle \^(\^Display *\fIdpy\fP, int \fIscreen\fP,
+        Window \fIwindow\fP,
+        unsigned int \fItitle_length\fP,
+        const char *\fItitle_bytes\fP\^);
+.fi 
+.SH "ARGUMENTS"
+.IP \fIdpy\fP 1i
+Specifies the connection to the X server.
+.IP \fIscreen\fP 1i
+Specifies which screen.
+.IP \fImask\fP 1i
+Mask of event types the client is interested in.
+.IP \fIwindow\fP 1i
+Specifies which window.
+.IP \fIframe_style\fP 1i
+Specifies the style of window frame decoration.
+.IP \fIframe_style_ex\fP 1i
+Specifies the extended style of window frame decoration.
+.IP \fIframe_rect\fP 1i
+Specifies which rectangle to return from the window frame decoration.
+.IP \fIinner_x\fP,\fIinner_y\fP,\fIinner_w\fP,\fIinner_h\fP 1i
+Rectangle of the window content inside the window frame decoration.
+
+.SH "DATATYPES"
+.PP 
+.B Events
+.nf 
+typedef struct {
+    int type;               \/* of event *\/
+    unsigned long serial;   \/* # of last request processed by server *\/
+    Bool send_event;        \/* true if came from a SendEvent request *\/
+    Display *display;       \/* Display the event was read from *\/
+    Window window;          \/* window of event *\/
+    Time time;              \/* server timestamp when event happened *\/
+    int kind;               \/* subtype of event *\/
+    int arg;
+    int x;
+    int y;
+    int w;
+    int h;
+} XWindowsWMNotifyEvent;
+.fi 
+.B XWindowsWMNotifyEvent
+is sent to a client who has requested notification of WindowsWM events with
+\fBXWindowsWMSelectInput\fP.
+
+.PP 
+Event types:
+.nf 
+\&#define WindowsWMControllerNotify               0
+\&#define WindowsWMActivationNotify               1
+\&#define WindowsWMNumberEvents                   2
+.fi 
+.PP 
+Event masks:
+.nf 
+\&#define WindowsWMControllerNotifyMask           (1L << 0)
+\&#define WindowsWMActivationNotifyMask           (1L << 1)
+.fi 
+.PP 
+Kinds of ControllerNotify events:
+.nf 
+\&#define WindowsWMMinimizeWindow                 0
+\&#define WindowsWMMaximizeWindow                 1
+\&#define WindowsWMRestoreWindow                  2
+\&#define WindowsWMCloseWindow                    3
+\&#define WindowsWMBringAllToFront                4
+\&#define WindowsWMHideWindow                     5
+\&#define WindowsWMMoveWindow                     6
+\&#define WindowsWMResizeWindow                   7
+\&#define WindowsWMActivateWindow                 8
+.fi 
+.PP 
+Kinds of ActivationNotify events:
+.nf 
+\&#define WindowsWMIsActive                       0
+\&#define WindowsWMIsInactive                     1
+.fi 
+.PP 
+Errors:
+.nf 
+\&#define WindowsWMClientNotLocal                 0
+\&#define WindowsWMOperationNotSupported          1
+\&#define WindowsWMNumberErrors                   2
+.fi 
+.PP 
+.B Window Parameters
+.PP 
+Values for \fIframe_rect\fP argument to \fBXWindowsWMFrameGetRect\fP:
+.nf 
+\&#define WindowsWMFrameRectTitleBar              1
+\&#define WindowsWMFrameRectTracking              2
+\&#define WindowsWMFrameRectGrowBox               3
+.fi 
+.PP 
+Window frame styles:
+.nf 
+\&#define WindowsWMFrameStyleBorder               0x800000
+\&#define WindowsWMFrameStyleCaption              0xc00000
+\&#define WindowsWMFrameStyleChild                0x40000000
+\&#define WindowsWMFrameStyleChildWindow          0x40000000
+\&#define WindowsWMFrameStyleClipChildren         0x2000000
+\&#define WindowsWMFrameStyleClipSiblings         0x4000000
+\&#define WindowsWMFrameStyleDisabled             0x8000000
+\&#define WindowsWMFrameStyleDlgFrame             0x400000
+\&#define WindowsWMFrameStyleGroup                0x20000
+\&#define WindowsWMFrameStyleHScroll              0x100000
+\&#define WindowsWMFrameStyleIconic               0x20000000
+\&#define WindowsWMFrameStyleMaximize             0x1000000
+\&#define WindowsWMFrameStyleMaximizeBox          0x10000
+\&#define WindowsWMFrameStyleMinimize             0x20000000
+\&#define WindowsWMFrameStyleMinimizeBox          0x20000
+\&#define WindowsWMFrameStyleOverlapped           0
+\&#define WindowsWMFrameStyleOverlappedWindow     0xcf0000
+\&#define WindowsWMFrameStylePopup                0x80000000
+\&#define WindowsWMFrameStylePopupWindow          0x80880000
+\&#define WindowsWMFrameStyleSizeBox              0x40000
+\&#define WindowsWMFrameStyleSysMenu              0x80000
+\&#define WindowsWMFrameStyleTabStop              0x10000
+\&#define WindowsWMFrameStyleThickFrame           0x40000
+\&#define WindowsWMFrameStyleTiled                0
+\&#define WindowsWMFrameStyleTiledWindow          0xcf0000
+\&#define WindowsWMFrameStyleVisible              0x10000000
+\&#define WindowsWMFrameStyleVScroll              0x200000
+.fi 
+.PP 
+Window frame extended styles:
+.nf 
+\&#define WindowsWMFrameStyleExAcceptFiles        16
+\&#define WindowsWMFrameStyleExAppWindow          0x40000
+\&#define WindowsWMFrameStyleExClientEdge         512
+\&#define WindowsWMFrameStyleExComposited         0x2000000
+\&#define WindowsWMFrameStyleExContextHelp        0x400
+\&#define WindowsWMFrameStyleExControlParent      0x10000
+\&#define WindowsWMFrameStyleExDlgModalFrame      1
+\&#define WindowsWMFrameStyleExLayered            0x80000
+\&#define WindowsWMFrameStyleExLayoutRtl          0x400000
+\&#define WindowsWMFrameStyleExLeft               0
+\&#define WindowsWMFrameStyleExLeftScrollBar      0x4000
+\&#define WindowsWMFrameStyleExLtrReading         0
+\&#define WindowsWMFrameStyleExMDIChild           64
+\&#define WindowsWMFrameStyleExNoActivate         0x8000000
+\&#define WindowsWMFrameStyleExNoInheritLayout    0x100000
+\&#define WindowsWMFrameStyleExNoParentNotify     4
+\&#define WindowsWMFrameStyleExOverlappedWindow   0x300
+\&#define WindowsWMFrameStyleExPaletteWindow      0x188
+\&#define WindowsWMFrameStyleExRight              0x1000
+\&#define WindowsWMFrameStyleExRightScrollBar     0
+\&#define WindowsWMFrameStyleExRtlReading         0x2000
+\&#define WindowsWMFrameStyleExStaticEdge         0x20000
+\&#define WindowsWMFrameStyleExToolWindow         128
+\&#define WindowsWMFrameStyleExTopMost            8
+\&#define WindowsWMFrameStyleExTransparent        32
+\&#define WindowsWMFrameStyleExWindowEdge         256
+.fi 
+
+.SH "DESCRIPTION"
+.B WindowsWM
+is a simple library designed to interface with the Windows\-WM extension.
+This extension allows X window managers to better interact with
+the Cygwin XWin server when running X11 in a rootless mode.
+.PP 
+A more complete description will be forthcoming eventually.
+
+.SH "FUNCTIONS"
+.B XWindowsWMDisableUpdate
+causes any updates to the windows on the screen to be queued until updates
+are reenabled with \fBXWindowsWMReenableUpdate\fP. This is useful to avoid
+intermediate redraws to the screen if a number of changes are going to be
+made at once. Updates should only be disabled temporarily while drawing
+to a window. These calls may be nested and each call to
+\fBXWindowsWMDisableUpdate\fP must be paired with a subsequent call to
+\fBXWindowsWMReenableUpdate\fP. Updating is not reenabled until the last
+unnested call to \fBXWindowsWMReenableUpdate\fP. Disabling updates applies
+to window content; however, it is implementation dependent whether window
+size and position changes are disabled as well.
+.PP 
+.B XWindowsWMSelectInput
+is used to request that a client receive notification of the
+.B WindowsWM
+events listed above. The event mask specifies the event types the client is
+interested in receiving. Passing an event mask of 0 stops notification of
+events.
+.PP 
+.B XWindowsWMSetFrontProcess
+directs the X server to make itself the front most application among all
+the other Windows applications. This causes X11 windows to move above
+other applications' windows and for the X server to start receiving
+keyboard and mouse events.
+.PP 
+.B XWindowsWMFrameDraw
+can be used to decorate a top\-level window with the standard Windows window
+frame and widgets. The \fIframe_style\fP controls the overall look of the
+window frame and \fIframe_style_ex\fP specifies the extended window style attributes. The dimensions of the X11 window content are passed as the \fIinner_*\fP rectangle.
+.B XWindowsWMFrameGetRect
+is used to calculate the size of the rectangle from the size of the
+window content, which is being reparented.
+.PP 
+.B XWindowsWMFrameSetTitle
+can be used to set the title of the Windows window decoration.
+.PP 
+.B XWindowsWMFrameGetRect
+returns a rectangle that encloses an element of the window frame decoration.
+The \fIframe_rect\fP argument specifies the element of interest. The
+\fIinner_*\fP rectangle (as described above) specifies the window geometry. If WindowsWMFrameRectTitleBar is passed for \fIframe_rect\fP,
+the \fIinner_*\fP parameters are ignored. The WindowsWMFrameRectTracking and
+WindowsWMFrameRectGrowBox rectangles are primarily intended to be used by the
+window manager to determine the correct placement for child windows to
+receive events. The tracking rectangle is the area of the window containing
+the close, collapse and zoom boxes. Typically when the cursor is over this
+area, the window manager will highlight the close, collapse, and zoom
+buttons to conform to the standard Aqua interface.
+.PP 
+Other functions include: \fBXWindowsWMQueryExtension\fP, which returns the event
+and error base codes and \fBXWindowsWMQueryVersion\fP, which returns the current
+version of the extension. (This information is cached by the library.)
+
+.SH "RESTRICTIONS"
+.B WindowsWM
+is only intended to be used on Cygwin when running a rootless XWin server.

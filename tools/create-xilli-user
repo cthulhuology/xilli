@@ -1,0 +1,4 @@
+#!/bin/bash
+groupadd xilli
+adduser --shell /bin/bash --disabled-password --ingroup xilli --no-create-home --home `pwd`  xilli 
+sudo chown -R xilli:xilli root

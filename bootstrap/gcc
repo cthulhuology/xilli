@@ -1,0 +1,65 @@
+#!/bin/bash
+
+GCCSRC=gcc-6.2.0
+GMPSRC=gmp-6.1.1
+MPFRSRC=mpfr-3.1.4
+MPCSRC=mpc-1.0.3
+# ISLSRC=isl-0.16.1
+
+cd tmp
+rm -rf $GCCSRC
+cp -R $XILLI/src/$GCCSRC .
+cd $GCCSRC
+cp -R $XILLI/src/$GMPSRC gmp
+cp -R $XILLI/src/$MPFRSRC mpfr
+cp -R $XILLI/src/$MPCSRC mpc
+# cp -R $XILLI/src/$ISLSRC isl
+
+cd mpfr
+autoreconf -f -i
+cd ..
+
+#for file in \
+# $(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
+#do
+#  cp -uv $file{,.orig}
+#  sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
+#      -e 's@/usr@/tools@g' $file.orig > $file
+#  echo '
+##undef STANDARD_STARTFILE_PREFIX_1
+##undef STANDARD_STARTFILE_PREFIX_2
+##define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+##define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+#  touch $file.orig
+#done
+
+mkdir build
+cd build
+
+export CC="/tools/bin/musl-gcc -static -Wl,-Bstatic -static-libgcc"
+export CXX="g++ -static -Wl,-Bstatic -static-libgcc"
+../configure \
+	--target=x86_64-linux-musl \
+	--prefix=/tools \
+	--disable-shared \
+	--enable-static \
+	--disable-multilib \
+	--with-sysroot=/tools \
+	--with-newlib \
+	--without-headers \
+	--with-local-prefix=/tools \
+	--with-native-system-header-dir=/include \
+	--disable-nls \
+	--disable-decimal-float \
+	--disable-libatomic \
+	--disable-libgomp \
+	--disable-libmpx \
+	--disable-libquadmath \
+	--disable-libssp \
+	--disable-libstdcxx \
+	--disable-threads \
+	--disable-libvtv \
+	--enable-languages=c,c++
+
+make
+make install

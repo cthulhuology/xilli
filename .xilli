@@ -1,0 +1,9 @@
+
+# disable hashing
+set +h
+export XILLI=/home/desktop/Code/xilli
+export XILLI_ROOT=$XILLI/root/
+export XILLI_ARCH=x86_64
+export XILLI_TARGET=$XILLI_ARCH-xilli-linux
+
+

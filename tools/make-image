@@ -1,0 +1,5 @@
+#!/bin/sh
+dd if=/dev/zero of=xilli.img bs=1G count=10
+sudo /sbin/losetup /dev/loop2 xilli.img
+sudo /sbin/mkfs.ext4 /dev/loop2
+sudo mount -o loop /dev/loop2 ./root/

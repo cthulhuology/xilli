@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo /sbin/losetup /dev/loop2 xilli.img
+sudo mount -o loop /dev/loop2 ./root/

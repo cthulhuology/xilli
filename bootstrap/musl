@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd tmp
+cp -R $XILLI/src/musl .
+cd musl
+./configure --prefix=/tools/ --libdir=/tools/lib/ --includedir=/tools/include --syslibdir=/tools/lib --target=x86_64-linux-gnu --disable-shared --enable-static 
+make -j`nprocs`
+make install
+
+
