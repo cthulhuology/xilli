@@ -1,0 +1,18 @@
+#!/tools/bin/bash
+
+MAKESRC=make-4.2.1
+
+source .tools
+
+cd tmp
+rm -rf $MAKESRC
+cp -r $XILLI/src/$MAKESRC .
+cd $MAKESRC
+
+autoreconf -f -i
+./configure \
+	--prefix=/tools	 \
+	--disable-nls
+
+make AM_LDFLAGS=""
+make install

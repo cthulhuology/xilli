@@ -1,3 +1,3 @@
 #!/bin/bash
 
-for I in /tools/bin/*; do ldd $I; done
+for I in /tools/bin/*; do ldd $I | if [[ ! -z $(grep -v "not a dynamic")  ]]; then echo "$I failed"; fi; done

@@ -1,0 +1,18 @@
+#!/tools/bin/bash
+
+GZIP=gzip-1.8
+
+source .tools
+
+cd tmp
+rm -rf $GZIP
+cp -r $XILLI/src/$GZIP .
+cd $GZIP
+
+autoreconf -f -i
+./configure \
+	--prefix=/tools	 \
+	--disable-nls
+
+make
+make install

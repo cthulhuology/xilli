@@ -1,0 +1,18 @@
+#!/tools/bin/bash
+
+M4SRC=m4-1.4.17
+
+source .tools
+
+cd tmp
+rm -rf $M4SRC
+cp -r $XILLI/src/$M4SRC .
+cd $M4SRC
+
+autoreconf -f -i
+./configure \
+	--prefix=/tools	 \
+	--disable-nls
+
+make
+make install
