@@ -1,0 +1,17 @@
+#!/tools/bin/bash
+
+PATCH=patch-2.7.5
+
+source .tools
+
+cd tmp
+rm -rf $PATCH
+cp -r $XILLI/src/$PATCH .
+cd $PATCH
+
+./configure \
+	--prefix=/tools	 \
+	--disable-nls
+
+make
+make install
