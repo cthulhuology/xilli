@@ -1,0 +1,17 @@
+#!/tools/bin/bash
+
+DIFFUTILS=diffutils-3.5
+
+source .tools
+
+cd tmp
+rm -rf $DIFFUTILS
+cp -r $XILLI/src/$DIFFUTILS .
+cd $DIFFUTILS
+
+./configure \
+	--prefix=/tools	 \
+	--disable-nls
+
+make
+make install

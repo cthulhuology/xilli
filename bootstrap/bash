@@ -12,6 +12,7 @@ cd $BASH
 	--prefix=/tools \
 	--without-bash-malloc \
 	--enable-static-link \
+	--disable-nls
 	
 sed -i s%\-rdynamic%% Makefile
 sed -i s%\-rdynamic%% builtins/Makefile

@@ -1,0 +1,31 @@
+#!/tools/bin/bash
+
+. .tools
+
+cd tmp
+rm -rf ubase
+cp -r $XILLI/src/ubase .
+cd ubase
+
+cat >config.mk <<CONFIGMK
+
+# ubase version
+VERSION = 0.1
+
+# paths
+PREFIX = /tools
+MANPREFIX = /tools/share/man
+
+CC = $CC
+AR = $AR
+RANLIB = $RANLIB
+
+CPPFLAGS = -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=700 -D_GNU_SOURCE
+CFLAGS   = -std=c99 -Wall -Wextra
+LDLIBS   = -lcrypt
+LDFLAGS  = -s
+
+CONFIGMK
+
+make
+make install
