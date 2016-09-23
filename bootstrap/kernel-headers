@@ -1,0 +1,11 @@
+#!/bin/bash
+
+LINUX=linux-4.7.2
+
+cd tmp
+rm -rf $LINUX
+cp -R $XILLI/src/$LINUX .
+cd $LINUX
+make mrproper
+make INSTALL_HDR_PATH=dest headers_install
+cp -rv dest/include/* /tools/include

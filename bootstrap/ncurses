@@ -1,0 +1,22 @@
+#!/bin/bash
+
+NCURSES=ncurses-6.0
+
+source .tools 
+
+cd tmp
+rm -rf $NCURSES
+cp -r $XILLI/src/$NCURSES .
+cd $NCURSES
+
+# sed -i s/mawk// configure
+
+./configure \
+	--prefix=/tools \
+	--without-shared \
+	--without-debug \
+	--without-ada \
+	--enable-overwrite
+
+make CPPFLAGS="-P" CFLAGS="-I../include -I../ncurses -I../progs -I../test" CXXFLAGS="-I../include -I../ncurses -I../progs -I../test"
+make install

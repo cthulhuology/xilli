@@ -1,0 +1,57 @@
+diff --git a/Makefile b/Makefile
+index eb9572d..b75a663 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@ ABIVER=  5.1
+ # Change the installation path as needed. This automatically adjusts
+ # the paths in src/luaconf.h, too. Note: PREFIX must be an absolute path!
+ #
+-export PREFIX= /usr/local
++export PREFIX= /tools/
+ export MULTILIB= lib
+ ##############################################################################
+ 
+diff --git a/src/Makefile b/src/Makefile
+index 9285c11..77debe7 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -24,7 +24,7 @@ NODOTABIVER= 51
+ # removing the '#' in front of them. Make sure you force a full recompile
+ # with "make clean", followed by "make" if you change any options.
+ #
+-DEFAULT_CC = gcc
++DEFAULT_CC = /tools/bin/x86_64-linux-musl-gcc -Bstatic
+ #
+ # LuaJIT builds as a native 32 or 64 bit binary by default.
+ CC= $(DEFAULT_CC)
+@@ -74,7 +74,7 @@ CCWARN= -Wall
+ # as dynamic mode.
+ #
+ # Mixed mode creates a static + dynamic library and a statically linked luajit.
+-BUILDMODE= mixed
++BUILDMODE= static
+ #
+ # Static mode creates a static library and a statically linked luajit.
+ #BUILDMODE= static
+@@ -564,9 +564,9 @@ endif
+ endif
+ endif
+ 
+-Q= @
++#Q= @
+ E= @echo
+-#Q=
++Q=
+ #E= @:
+ 
+ ##############################################################################
+@@ -684,8 +684,7 @@ $(LUAJIT_SO): $(LJVMCORE_O)
+ 
+ $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
+ 	$(E) "LINK      $@"
+-	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) $(TARGET_O) $(TARGET_ALIBS)
+-	$(Q)$(TARGET_STRIP) $@
++	/tools/bin/x86_64-linux-musl-gcc -B/tools -o luajit luajit.o libluajit.a -lm -ldl		
+ 	$(E) "OK        Successfully built LuaJIT"
+ 
+ ##############################################################################
