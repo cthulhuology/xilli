@@ -1,0 +1,14 @@
+CC="/bin/gcc -Bstatic"
+PAGER=/bin/less
+PAGER_ENV=LESS=R
+EDITOR=/bin/vim
+LANG=en_US
+GDM_LANG=en_US.utf8
+HOME=/home
+USER=/root
+SHELL=/bin/bash
+MANPATH=/share/man
+PATH=/bin:/tools/bin
+LESS="-R"
+
+export CC PAGER EDITOR LANG GDM_LANG HOME USER SHELL MANPATH PATH LESS

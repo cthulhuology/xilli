@@ -1,0 +1,11 @@
+#!/bin/bash
+
+VIMSRC=vim74
+
+rm -rf /tmp/$VIMSRC
+cp -R /src/$VIMSRC /tmp
+cd /tmp/$VIMSRC
+
+./configure
+make
+make install

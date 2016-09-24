@@ -1,0 +1,11 @@
+#!/bin/bash
+
+LIBRESSL=libressl-2.4.2
+
+rm -rf /tmp/$LIBRESSL
+cp -R /src/$LIBRESSL /tmp
+cd /tmp/$LIBRESSL
+
+./configure --enable-static --disable-shared --prefix=/ --enable-nc
+make
+make install

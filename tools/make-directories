@@ -1,4 +1,4 @@
 #!/bin/bash
 pushd root
-mkdir bin home tools dev sys proc tmp lib var share etc run
+mkdir bin home tools dev sys proc tmp lib var share etc run include boot opt install
 popd

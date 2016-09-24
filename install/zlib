@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ZLIB=zlib-1.2.8
+
+rm -rf /tmp/$ZLIB
+cp -R /src/$ZLIB /tmp
+cd /tmp/$ZLIB
+
+./configure --static --prefix=/ --includedir=/include --libdir=/lib
+make
+make install

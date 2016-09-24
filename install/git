@@ -1,0 +1,9 @@
+#!/bin/bash
+
+GIT=git
+rm -rf /tmp/$GIT
+cp -R /src/$GIT /tmp
+cd /tmp/$GIT
+
+make prefix=/ all doc
+make prefix=/ install install-doc

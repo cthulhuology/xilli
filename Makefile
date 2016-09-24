@@ -22,6 +22,6 @@ bootstrap:
 	./xilli bootstrap/xz
 	./xilli bootstrap/m4
 	./xilli bootstrap/make
-#	./xilli bootstrap/perl
+	./xilli bootstrap/perl
 	
 .PHONY: bootstrap

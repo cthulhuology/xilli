@@ -3,4 +3,6 @@
 ln -s /tools/bin/{bash,cat,echo,pwd,stty,env} /bin
 ln -s /tools/bin/bash /bin/sh
 ln -s / /usr
+ln -s / /local
 for I in /tools/bin/x86_64*; do ln -s $I $(echo $I | sed 's%x86_64-linux-musl-%%' | sed 's%^/tools%%'); done
+ln -s /tools/include/* /include/

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+LESS=less-481
+
+rm -rf /tmp/$LESS
+cp -R /src/$LESS /tmp
+cd /tmp/$LESS
+
+./configure
+make
+make install

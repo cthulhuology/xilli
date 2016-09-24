@@ -1,0 +1,11 @@
+#!/bin/bash
+
+AUTOCONF=autoconf-2.69
+
+rm -rf /tmp/$AUTOCONF
+cp -R /src/$AUTOCONF /tmp
+cd /tmp/$AUTOCONF
+
+./configure --prefix=/
+make
+make install

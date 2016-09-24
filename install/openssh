@@ -1,0 +1,15 @@
+#!/bin/bash
+
+OPENSSH=openssh
+
+rm -rf /tmp/$OPENSSH
+cp -R /src/$OPENSSH /tmp
+cd /tmp/$OPENSSH
+
+
+export CFLAGS=-I/include
+autoconf
+autoheader
+./configure --prefix=/ --with-default-path=/bin:/tools/bin
+make
+make install
