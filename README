@@ -1,8 +1,61 @@
 xilli
 ------
 
+xilli linux is a pragmatic linux distribution designed to be:
+	
+	* simple
+	* understandable
+	* manageable
+	* and command line friendly
 
-* ./tools/mkimg.sh
-* cd root
-* ../tools/mktld.sh
-*
+more information about xilli linux will be found at the website
+
+	http://xil.li/
+
+right now xilli is in an experimental stage, and has only just the
+basic bootstrap environment created. 
+
+
+getting started
+---------------
+
+to create a bootstrap image:
+
+* sudo tools/create-xilli-user
+* sudo tools/make-tools
+* make
+* sudo tools/make-image
+* sudo tools/make-directories
+* sudo tools/copy-config
+* sudo cp -R /tools/* root/tools/
+* sudo tools/mount-system
+* sudo tools/chroot
+
+this will create a new user on your system,
+create a /tools top level directory for the x86_64 cross compiler
+build the basic system utilities
+create a 10GB ext4 file system image and mount it via loopback
+create the system directories in the image
+copy over a minimal /etc configuration 
+copy over the cross compiler and system tools
+create some devices and mount the kernel mount points
+chroot into the environment
+
+after you're inside you might want to create some basic symlinks 
+by copying and pasting the tools/make-links script into the 
+new environment.
+
+
+roadmap
+-------
+
+in no particular order the plans for xilli linux are:
+
+* get a UEFI boot image working on a USB stick
+* clean up the build system to be all in makefiles
+* get X11 cross compiled and working
+* compile a bunch of utilities for everyday use
+* implement xish shell
+* customize the kernel to work on my hardware
+* port cross compiler to ARM
+
