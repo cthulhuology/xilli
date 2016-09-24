@@ -1,0 +1,18 @@
+#!/tools/bin/bash
+
+BZIP2=bzip2-1.0.6
+
+source .tools
+
+cd tmp
+rm -rf $BZIP2
+cp -r $XILLI/src/$BZIP2 .
+cd $BZIP2
+
+autoreconf -f -i
+./configure \
+	--prefix=/tools	 \
+	--disable-nls
+
+make
+make install
