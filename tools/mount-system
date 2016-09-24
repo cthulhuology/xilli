@@ -1,0 +1,9 @@
+#!/tools/bin/bash
+
+mknod -m 600 root/dev/console c 5 1 
+mknod -m 666 root/dev/null c 3 1
+mount -v --bind /dev root/dev
+mount -vt devpts devpts root/dev/pts -o gid=5,mode=620
+mount -vt proc proc root/proc
+mount -vt sysfs sysfs root/sys
+mount -vt tmpfs tmpfs root/run

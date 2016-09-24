@@ -1,0 +1,7 @@
+#!/tools/bin/bash
+chroot `pwd`/root /tools/bin/env -i \
+	HOME=/home                  \
+	TERM="$TERM"                \
+	PS1='\u:\w\$ '              \
+	PATH=/bin:/tools/bin \
+	/tools/bin/bash --login +h
