@@ -2,5 +2,5 @@ export CC="/tools/bin/x86_64-linux-musl-gcc -Bstatic"
 export CXX="/tools/bin/x86_64-linux-musl-g++ -Bstatic"
 export AS=/tools/bin/x86_64-linux-musl-as
 export AR=/tools/bin/x86_64-linux-musl-ar
-export LD=/tools/bin/x86_64-linux-musl-ld
+export LD="/tools/bin/x86_64-linux-musl-ld"
 export RANLIB=/tools/bin/x86_64-linux-musl-ranlib

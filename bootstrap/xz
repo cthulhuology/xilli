@@ -1,0 +1,20 @@
+#!/tools/bin/bash
+
+XZSRC=xz-5.2.2
+
+source .tools
+
+cd tmp
+rm -rf $XZSRC
+cp -r $XILLI/src/$XZSRC .
+cd $XZSRC
+
+autoreconf -f -i
+./configure \
+	--prefix=/tools	 \
+	--disable-nls \
+	--enable-static \
+	--disable-shared
+
+make
+make install
