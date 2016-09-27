@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SDHCP=sdhcp
+
+rm -rf /tmp/sdhcp
+cp -R /src/sdhcp /tmp
+cd /tmp/sdhcp
+
+patch -p3 < /patches/sdhcp.patch
+
+make
+make install

@@ -1,0 +1,40 @@
+diff -ruN /src/sdhcp/Makefile /tmp/sdhcp/Makefile
+--- /src/sdhcp/Makefile	2016-09-24 04:04:40.954977616 +0000
++++ /tmp/sdhcp/Makefile	2016-09-27 01:55:01.331266128 +0000
+@@ -43,18 +43,18 @@
+ 	@ranlib $@
+ 
+ install: all
+-	@echo installing executables to $(DESTDIR)$(PREFIX)/sbin
+-	@mkdir -p $(DESTDIR)$(PREFIX)/sbin
+-	@cp -f $(BIN) $(DESTDIR)$(PREFIX)/sbin
+-	@cd $(DESTDIR)$(PREFIX)/sbin && chmod 755 $(BIN)
++	@echo installing executables to $(DESTDIR)$(PREFIX)/bin
++	@mkdir -p $(DESTDIR)$(PREFIX)/bin
++	@cp -f $(BIN) $(DESTDIR)$(PREFIX)/bin
++	@cd $(DESTDIR)$(PREFIX)/bin && chmod 755 $(BIN)
+ 	@echo installing manual pages to $(DESTDIR)$(MANPREFIX)/man1
+ 	@mkdir -p $(DESTDIR)$(MANPREFIX)/man1
+ 	@for m in $(MAN); do sed "s/VERSION/$(VERSION)/g" < "$$m" > $(DESTDIR)$(MANPREFIX)/man1/"$$m"; done
+ 	@cd $(DESTDIR)$(MANPREFIX)/man1 && chmod 644 $(MAN)
+ 
+ uninstall:
+-	@echo removing executables from $(DESTDIR)$(PREFIX)/sbin
+-	@cd $(DESTDIR)$(PREFIX)/sbin && rm -f $(BIN)
++	@echo removing executables from $(DESTDIR)$(PREFIX)/bin
++	@cd $(DESTDIR)$(PREFIX)/bin && rm -f $(BIN)
+ 	@echo removing manual pages from $(DESTDIR)$(MANPREFIX)/man1
+ 	@cd $(DESTDIR)$(MANPREFIX)/man1 && rm -f $(MAN)
+ 
+diff -ruN /src/sdhcp/config.mk /tmp/sdhcp/config.mk
+--- /src/sdhcp/config.mk	2016-09-24 04:04:40.954977616 +0000
++++ /tmp/sdhcp/config.mk	2016-09-27 01:55:10.115375348 +0000
+@@ -1,7 +1,7 @@
+ # sdhcp version
+ VERSION   = 0.1
+ 
+-PREFIX    = /usr/local
++PREFIX    = /
+ DESTDIR   =
+ MANPREFIX = $(PREFIX)/share/man
+ 

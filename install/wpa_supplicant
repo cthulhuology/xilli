@@ -1,0 +1,13 @@
+#!/bin/bash
+
+WPASRC=wpa_supplicant-2.5
+
+rm -rf /tmp/$WPASRC
+cp -R /src/$WPASRC /tmp
+cd /tmp/$WPASRC
+
+patch -p3 < /patches/wpa_supplicant.patch
+
+cd wpa_supplicant
+make
+make install
