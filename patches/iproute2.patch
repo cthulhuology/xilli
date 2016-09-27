@@ -1,25 +1,75 @@
-diff -ruN /src/iproute2-4.7.0/Makefile /tmp/iproute2-4.7.0/Makefile
---- /src/iproute2-4.7.0/Makefile	2016-09-24 04:04:11.758616462 +0000
-+++ /tmp/iproute2-4.7.0/Makefile	2016-09-26 17:31:14.677287719 +0000
-@@ -9,7 +9,6 @@
+--- /src/iproute2-4.7.0/./tc/Makefile	2016-09-24 04:04:11.802617006 +0000
++++ /tmp/iproute2-4.7.0/./tc/Makefile	2016-09-27 01:45:57.456418427 +0000
+@@ -104,7 +104,6 @@
+ 
+ ifeq ($(SHARED_LIBS),y)
+ LDLIBS += -ldl
+-LDFLAGS += -Wl,-export-dynamic
+ endif
+ 
+ TCLIB := tc_core.o
+--- /src/iproute2-4.7.0/./Makefile	2016-09-24 04:04:11.758616462 +0000
++++ /tmp/iproute2-4.7.0/./Makefile	2016-09-27 01:45:57.460418478 +0000
+@@ -2,15 +2,14 @@
+ MAKEFLAGS += --no-print-directory
+ endif
+ 
+-PREFIX?=/usr
++PREFIX?=/
+ LIBDIR?=$(PREFIX)/lib
+-SBINDIR?=/sbin
++SBINDIR?=/bin
+ CONFDIR?=/etc/iproute2
  DATADIR?=$(PREFIX)/share
  DOCDIR?=$(DATADIR)/doc/iproute2
  MANDIR?=$(DATADIR)/man
 -ARPDDIR?=/var/lib/arpd
- KERNEL_INCLUDE?=/usr/include
+-KERNEL_INCLUDE?=/usr/include
++KERNEL_INCLUDE?=/include
  BASH_COMPDIR?=$(DATADIR)/bash-completion/completions
  
-@@ -62,7 +61,6 @@
+ # Path to db_185.h include
+@@ -62,17 +61,8 @@
  install: all
  	install -m 0755 -d $(DESTDIR)$(SBINDIR)
  	install -m 0755 -d $(DESTDIR)$(CONFDIR)
 -	install -m 0755 -d $(DESTDIR)$(ARPDDIR)
- 	install -m 0755 -d $(DESTDIR)$(DOCDIR)/examples
- 	install -m 0755 -d $(DESTDIR)$(DOCDIR)/examples/diffserv
- 	install -m 0644 README.iproute2+tc $(shell find examples -maxdepth 1 -type f) \
-diff -ruN /src/iproute2-4.7.0/include/linux/if_bridge.h /tmp/iproute2-4.7.0/include/linux/if_bridge.h
---- /src/iproute2-4.7.0/include/linux/if_bridge.h	2016-09-24 04:04:11.770616610 +0000
-+++ /tmp/iproute2-4.7.0/include/linux/if_bridge.h	2016-09-26 17:31:37.277576962 +0000
+-	install -m 0755 -d $(DESTDIR)$(DOCDIR)/examples
+-	install -m 0755 -d $(DESTDIR)$(DOCDIR)/examples/diffserv
+-	install -m 0644 README.iproute2+tc $(shell find examples -maxdepth 1 -type f) \
+-		$(DESTDIR)$(DOCDIR)/examples
+-	install -m 0644 $(shell find examples/diffserv -maxdepth 1 -type f) \
+-		$(DESTDIR)$(DOCDIR)/examples/diffserv
+ 	@for i in $(SUBDIRS) doc; do $(MAKE) -C $$i install; done
+-	install -m 0644 $(shell find etc/iproute2 -maxdepth 1 -type f) $(DESTDIR)$(CONFDIR)
+-	install -m 0755 -d $(DESTDIR)$(BASH_COMPDIR)
+-	install -m 0644 bash-completion/tc $(DESTDIR)$(BASH_COMPDIR)
++	cp -R etc/iproute2 /etc/
+ 
+ snapshot:
+ 	echo "static const char SNAPSHOT[] = \""`date +%y%m%d`"\";" \
+--- /src/iproute2-4.7.0/./genl/Makefile	2016-09-24 04:04:11.766616561 +0000
++++ /tmp/iproute2-4.7.0/./genl/Makefile	2016-09-27 01:45:57.464418529 +0000
+@@ -13,7 +13,6 @@
+ GENLLIB :=
+ 
+ ifeq ($(SHARED_LIBS),y)
+-LDFLAGS += -Wl,-export-dynamic
+ LDLIBS  += -lm -ldl
+ endif
+ 
+--- /src/iproute2-4.7.0/./ip/Makefile	2016-09-24 04:04:11.778616709 +0000
++++ /tmp/iproute2-4.7.0/./ip/Makefile	2016-09-27 01:45:57.464418529 +0000
+@@ -40,7 +40,6 @@
+ ifeq ($(SHARED_LIBS),y)
+ 
+ LDLIBS += -ldl
+-LDFLAGS += -Wl,-export-dynamic
+ 
+ else
+ 
+--- /src/iproute2-4.7.0/./include/linux/if_bridge.h	2016-09-24 04:04:11.770616610 +0000
++++ /tmp/iproute2-4.7.0/./include/linux/if_bridge.h	2016-09-27 01:40:20.800118869 +0000
 @@ -15,7 +15,6 @@
  
  #include <linux/types.h>
@@ -28,9 +78,28 @@ diff -ruN /src/iproute2-4.7.0/include/linux/if_bridge.h /tmp/iproute2-4.7.0/incl
  
  #define SYSFS_BRIDGE_ATTR	"bridge"
  #define SYSFS_BRIDGE_FDB	"brforward"
-diff -ruN /src/iproute2-4.7.0/include/linux/netfilter.h /tmp/iproute2-4.7.0/include/linux/netfilter.h
---- /src/iproute2-4.7.0/include/linux/netfilter.h	2016-09-24 04:04:11.774616660 +0000
-+++ /tmp/iproute2-4.7.0/include/linux/netfilter.h	2016-09-26 17:32:12.822031869 +0000
+--- /src/iproute2-4.7.0/./include/linux/netfilter_ipv4/ip_tables.h	2016-09-24 04:04:11.774616660 +0000
++++ /tmp/iproute2-4.7.0/./include/linux/netfilter_ipv4/ip_tables.h	2016-09-27 01:40:20.804118920 +0000
+@@ -17,7 +17,6 @@
+ 
+ #include <linux/types.h>
+ 
+-#include <linux/if.h>
+ #include <linux/netfilter_ipv4.h>
+ 
+ #include <linux/netfilter/x_tables.h>
+--- /src/iproute2-4.7.0/./include/linux/xfrm.h	2016-09-24 04:04:11.778616709 +0000
++++ /tmp/iproute2-4.7.0/./include/linux/xfrm.h	2016-09-27 01:40:20.804118920 +0000
+@@ -1,7 +1,6 @@
+ #ifndef _LINUX_XFRM_H
+ #define _LINUX_XFRM_H
+ 
+-#include <linux/in6.h>
+ #include <linux/types.h>
+ 
+ /* All of the structures in this file may not change size as they are
+--- /src/iproute2-4.7.0/./include/linux/netfilter.h	2016-09-24 04:04:11.774616660 +0000
++++ /tmp/iproute2-4.7.0/./include/linux/netfilter.h	2016-09-27 01:40:20.804118920 +0000
 @@ -4,8 +4,6 @@
  #include <linux/types.h>
  
@@ -40,14 +109,24 @@ diff -ruN /src/iproute2-4.7.0/include/linux/netfilter.h /tmp/iproute2-4.7.0/incl
  
  /* Responses from hook functions. */
  #define NF_DROP 0
-diff -ruN /src/iproute2-4.7.0/include/linux/xfrm.h /tmp/iproute2-4.7.0/include/linux/xfrm.h
---- /src/iproute2-4.7.0/include/linux/xfrm.h	2016-09-24 04:04:11.778616709 +0000
-+++ /tmp/iproute2-4.7.0/include/linux/xfrm.h	2016-09-26 17:31:44.337667319 +0000
-@@ -1,7 +1,6 @@
- #ifndef _LINUX_XFRM_H
- #define _LINUX_XFRM_H
+--- /src/iproute2-4.7.0/./include/xtables.h	2016-09-24 04:04:11.778616709 +0000
++++ /tmp/iproute2-4.7.0/./include/xtables.h	2016-09-27 01:40:20.804118920 +0000
+@@ -31,7 +31,7 @@
+ #define IPPROTO_UDPLITE	136
+ #endif
  
--#include <linux/in6.h>
- #include <linux/types.h>
+-#include <xtables-version.h>
++#include "/include/xtables-version.h"
  
- /* All of the structures in this file may not change size as they are
+ struct in_addr;
+ 
+--- /src/iproute2-4.7.0/./misc/ss.c	2016-09-24 04:04:11.798616957 +0000
++++ /tmp/iproute2-4.7.0/./misc/ss.c	2016-09-27 01:40:20.804118920 +0000
+@@ -26,6 +26,7 @@
+ #include <fnmatch.h>
+ #include <getopt.h>
+ #include <stdbool.h>
++#include <limits.h>
+ 
+ #include "utils.h"
+ #include "rt_names.h"

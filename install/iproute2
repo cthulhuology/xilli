@@ -10,3 +10,4 @@ patch -p3  < /patches/iproute2.patch
 
 ./configure --prefix=/
 make
+make install
