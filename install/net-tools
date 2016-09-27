@@ -1,0 +1,16 @@
+#!/bin/bash
+
+NETTOOLS=net-tools-1.60
+
+rm -rf /tmp/$NETTOOLS
+cp -R /src/$NETTOOLS /tmp
+cd /tmp/$NETTOOLS
+
+patch -p3 < /patches/net-tools-c.patch
+patch -p3 < /patches/net-tools-h.patch
+patch -p3 < /patches/net-tools-makefile.patch
+
+cp /patches/net-tools-config.make /tmp/$NETTOOLS/config.make
+cp /patches/net-tools-config.h /tmp/$NETTOOLS/config.h
+make
+make install

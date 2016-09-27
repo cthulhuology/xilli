@@ -1,0 +1,12 @@
+#!/bin/bash
+
+HELP2MAN=help2man-1.47.4
+
+rm -rf /tmp/$HELP2MAN
+cp -R /src/$HELP2MAN /tmp
+cd /tmp/$HELP2MAN
+
+
+./configure --prefix=/ --disable-nls
+make
+make install

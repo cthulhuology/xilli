@@ -1,0 +1,17 @@
+#!/bin/bash
+
+FLEX=flex-2.6.1
+
+source .tools
+
+cd tmp
+cp -r $XILLI/src/$FLEX .
+cd $FLEX
+
+./configure \
+	--prefix=/tools \
+	--disable-nls \
+	--enable-shared=no \
+	--enable-static=yes
+make
+make install

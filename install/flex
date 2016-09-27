@@ -1,0 +1,14 @@
+#!/bin/bash
+
+FLEX=flex-2.6.1
+
+rm -rf /tmp/$FLEX
+cp -R /src/$FLEX /tmp
+cd /tmp/$FLEX
+
+./configure \
+        --prefix=/tools \
+        --disable-nls \
+        --enable-shared=no \
+        --enable-static=yes
+make

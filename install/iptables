@@ -1,0 +1,18 @@
+#!/bin/bash
+
+IPTABLES=iptables-1.6.0
+
+rm -rf /tmp/$IPTABLES
+cp -R /src/$IPTABLES /tmp
+cd /tmp/$IPTABLES
+
+./configure --prefix=/usr      \
+	--sbindir=/bin    \
+	--disable-nftables \
+	--enable-libipq    \
+	--disable-shared \
+	--enable-static \
+	--with-xtlibdir=/lib/xtables
+
+make CFLAGS=-I/include
+make install

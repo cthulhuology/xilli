@@ -1,0 +1,74 @@
+--- /src/net-tools-1.60/Makefile	2016-09-26 21:09:41.032837845 +0000
++++ /tmp/net-tools-1.60/Makefile	2016-09-27 01:15:07.324747899 +0000
+@@ -76,7 +76,7 @@
+ NET_LIB_PATH = lib
+ NET_LIB_NAME = net-tools
+ 
+-PROGS	:= ifconfig hostname arp netstat route rarp slattach plipconfig nameif
++PROGS	:= ifconfig arp netstat route rarp slattach plipconfig nameif
+ 
+ -include config.make
+ ifeq ($(HAVE_IP_TOOLS),1)
+@@ -190,9 +190,6 @@
+ nameif:	nameif.o
+ 		$(CC) $(LDFLAGS) -o nameif nameif.o 
+ 
+-hostname:	hostname.o
+-		$(CC) $(LDFLAGS) -o hostname hostname.o $(DNLIB)
+-
+ route:		$(NET_LIB) route.o
+ 		$(CC) $(LDFLAGS) -o route route.o $(NLIB) $(RESLIB)
+ 
+@@ -221,39 +218,28 @@
+ 		$(CC) $(LDFLAGS) -o mii-tool mii-tool.o
+ 
+ installbin:
+-	install -m 0755 -d ${BASEDIR}/sbin
+ 	install -m 0755 -d ${BASEDIR}/bin
+-	install -m 0755 arp        ${BASEDIR}/sbin
+-	install -m 0755 hostname   ${BASEDIR}/bin
+-	install -m 0755 ifconfig   ${BASEDIR}/sbin
+-	install -m 0755 nameif     ${BASEDIR}/sbin
++	install -m 0755 -d ${BASEDIR}/bin
++	install -m 0755 arp        ${BASEDIR}/bin
++	install -m 0755 ifconfig   ${BASEDIR}/bin
++	install -m 0755 nameif     ${BASEDIR}/bin
+ 	install -m 0755 netstat    ${BASEDIR}/bin
+-	install -m 0755 plipconfig $(BASEDIR)/sbin
+-	install -m 0755 rarp       ${BASEDIR}/sbin
+-	install -m 0755 route      ${BASEDIR}/sbin
+-	install -m 0755 slattach   $(BASEDIR)/sbin
++	install -m 0755 plipconfig $(BASEDIR)/bin
++	install -m 0755 rarp       ${BASEDIR}/bin
++	install -m 0755 route      ${BASEDIR}/bin
++	install -m 0755 slattach   $(BASEDIR)/bin
+ ifeq ($(HAVE_IP_TOOLS),1)
+-	install -m 0755 ipmaddr    $(BASEDIR)/sbin
+-	install -m 0755 iptunnel   $(BASEDIR)/sbin
++	install -m 0755 ipmaddr    $(BASEDIR)/bin
++	install -m 0755 iptunnel   $(BASEDIR)/bin
+ endif
+ ifeq ($(HAVE_MII),1)
+-	install -m 0755 mii-tool   $(BASEDIR)/sbin
+-endif
+-	ln -fs hostname $(BASEDIR)/bin/dnsdomainname
+-	ln -fs hostname $(BASEDIR)/bin/ypdomainname
+-	ln -fs hostname $(BASEDIR)/bin/nisdomainname
+-	ln -fs hostname $(BASEDIR)/bin/domainname
+-ifeq ($(HAVE_AFDECnet),1)
+-	ln -fs hostname $(BASEDIR)/bin/nodename
++	install -m 0755 mii-tool   $(BASEDIR)/bin
+ endif
+ 
+ savebin:
+-	@for i in ${BASEDIR}/sbin/arp ${BASEDIR}/sbin/ifconfig \
++	@for i in ${BASEDIR}/bin/arp ${BASEDIR}/bin/ifconfig \
+                  ${BASEDIR}/bin/netstat \
+-		 ${BASEDIR}/sbin/rarp ${BASEDIR}/sbin/route \
+-		 ${BASEDIR}/bin/hostname ${BASEDIR}/bin/ypdomainname \
+-                 ${BASEDIR}/bin/dnsdomainname ${BASEDIR}/bin/nisdomainname \
+-		 ${BASEDIR}/bin/domainname ; do \
++		 ${BASEDIR}/bin/rarp ${BASEDIR}/bin/route ; do \
+ 		 [ -f $$i ] && cp -f $$i $$i.old ; done ; echo Saved.
+ 
+ installdata:

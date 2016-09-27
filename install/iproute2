@@ -1,0 +1,12 @@
+#!/bin/bash
+
+IPROUTE2=iproute2-4.7.0
+
+rm -rf /tmp/$IPROUTE2
+cp -R /src/$IPROUTE2 /tmp
+cd /tmp/$IPROUTE2
+
+patch -p3  < /patches/iproute2.patch
+
+./configure --prefix=/
+make

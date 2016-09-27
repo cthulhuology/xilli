@@ -1,0 +1,12 @@
+--- Makefile.old	2016-09-26 18:06:50.784500066 +0000
++++ Makefile	2016-09-26 18:07:02.376646778 +0000
+@@ -203,8 +203,7 @@
+ am__v_texidevnull_0 = > /dev/null
+ am__v_texidevnull_1 = 
+ am__dirstamp = $(am__leading_dot)dirstamp
+-INFO_DEPS = $(srcdir)/doc/automake.info \
+-	$(srcdir)/doc/automake-history.info
++INFO_DEPS =
+ TEXINFO_TEX = $(top_srcdir)/lib/texinfo.tex
+ am__TEXINFO_TEX_DIR = $(top_srcdir)/lib
+ DVIS = doc/automake.dvi doc/automake-history.dvi

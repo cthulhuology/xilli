@@ -1,0 +1,153 @@
+--- /src/net-tools-1.60/./slattach.c	2016-09-26 21:09:41.032837845 +0000
++++ /tmp/net-tools-1.60/./slattach.c	2016-09-27 00:43:57.968688931 +0000
+@@ -44,6 +44,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <getopt.h>
++#include <termios.h>
+ #include <linux/if_slip.h>
+ 
+ #if defined(__GLIBC__)
+--- /src/net-tools-1.60/./lib/inet6_sr.c	2016-09-26 21:09:41.028837794 +0000
++++ /tmp/net-tools-1.60/./lib/inet6_sr.c	2016-09-26 21:30:48.721000994 +0000
+@@ -23,11 +23,7 @@
+ #include <string.h>
+ #include <stdio.h>
+ #include <unistd.h>
+-#ifdef __GLIBC__
+ #include <net/route.h>
+-#else
+-#include <netinet6/ipv6_route.h>	/* glibc does not have this */
+-#endif
+ #include "version.h"
+ #include "net-support.h"
+ #include "pathnames.h"
+--- /src/net-tools-1.60/./lib/inet6_gr.c	2016-09-26 21:09:41.028837794 +0000
++++ /tmp/net-tools-1.60/./lib/inet6_gr.c	2016-09-26 21:30:18.876620732 +0000
+@@ -23,9 +23,6 @@
+ #include <string.h>
+ #include <stdio.h>
+ #include <unistd.h>
+-#ifndef __GLIBC__
+-#include <netinet6/ipv6_route.h>	/* glibc doesn't have this */
+-#endif
+ #include "version.h"
+ #include "net-support.h"
+ #include "pathnames.h"
+@@ -142,6 +139,7 @@
+     long tstamp, expire, ndflags, reachable, stale, delete;
+     FILE *fp = fopen(_PATH_PROCNET_NDISC, "r");
+     char addr6p[8][5], haddrp[6][3];
++    long hz = sysconf(_SC_CLK_TCK);
+ 
+     if (!fp) {
+ 	ESYSNOT("nd_print", "ND Table");
+@@ -234,11 +232,11 @@
+ 	    stale = reachable > tstamp ? reachable - tstamp : 0;
+ 	delete = gc > tstamp ? gc - tstamp : 0;
+ 	if (ext != 2) {
+-	    printf(" %-9ld ", stale / HZ);
++	    printf(" %-9ld ", stale / hz);
+ 	    if (refcnt)
+ 		printf(" * ");
+ 	    else
+-		printf(" %-7ld ", delete / HZ);
++		printf(" %-7ld ", delete / hz);
+ 	}
+ 	printf("\n");
+     }
+--- /src/net-tools-1.60/./lib/util-ank.c	2016-09-26 21:09:41.028837794 +0000
++++ /tmp/net-tools-1.60/./lib/util-ank.c	2016-09-27 00:48:55.216515250 +0000
+@@ -25,6 +25,7 @@
+ #include <netdb.h>
+ #include <arpa/inet.h>
+ #include <resolv.h>
++#include <limits.h>
+ 
+ #include "intl.h"
+ #include "util-ank.h"
+--- /src/net-tools-1.60/./lib/inet_sr.c	2016-09-26 21:09:41.028837794 +0000
++++ /tmp/net-tools-1.60/./lib/inet_sr.c	2016-09-26 21:31:05.585215869 +0000
+@@ -61,7 +61,7 @@
+     struct rtentry rt;
+     char target[128], gateway[128] = "NONE", netmask[128] = "default";
+     int xflag, isnet;
+-
++    long HZ = sysconf(_SC_CLK_TCK);
+     xflag = 0;
+ 
+     if (!strcmp(*args, "#net")) {
+@@ -105,6 +105,7 @@
+     case 2:
+        isnet = 0; break;
+     default:
++	break;
+     }
+ 
+     /* Fill in the other fields. */
+--- /src/net-tools-1.60/./netstat.c	2016-09-26 21:09:41.032837845 +0000
++++ /tmp/net-tools-1.60/./netstat.c	2016-09-26 21:25:05.052622147 +0000
+@@ -714,6 +714,7 @@
+ #else
+     struct sockaddr_in localaddr, remaddr;
+ #endif
++    long HZ = sysconf(_SC_CLK_TCK);
+ 
+     if (lnr == 0)
+ 	return;
+--- /src/net-tools-1.60/./mii-tool.c	2016-09-26 21:09:41.036837897 +0000
++++ /tmp/net-tools-1.60/./mii-tool.c	2016-09-27 00:51:37.278601392 +0000
+@@ -29,8 +29,7 @@
+ 	http://www.national.com/pf/DP/DP83840.html
+ */
+ 
+-static char version[] =
+-"mii-tool.c 1.9 2000/04/28 00:56:08 (David Hinds)\n";
++static char version[] ="mii-tool.c 1.9 2000/04/28 00:56:08 (David Hinds)\n";
+ 
+ #include <unistd.h>
+ #include <stdlib.h>
+@@ -46,10 +45,8 @@
+ #include <sys/socket.h>
+ #include <sys/ioctl.h>
+ #include <net/if.h>
+-#ifndef __GLIBC__
+-#include <linux/if_arp.h>
+-#include <linux/if_ether.h>
+-#endif
++#include <limits.h>
++
+ #include "mii.h"
+ 
+ #define MAX_ETH		8		/* Maximum # of interfaces */
+@@ -378,18 +375,18 @@
+ 
+ /*--------------------------------------------------------------------*/
+ 
+-const char *usage =
+-"usage: %s [-VvRrwl] [-A media,... | -F media] [interface ...]
+-       -V, --version               display version information
+-       -v, --verbose               more verbose output
+-       -R, --reset                 reset MII to poweron state
+-       -r, --restart               restart autonegotiation
+-       -w, --watch                 monitor for link status changes
+-       -l, --log                   with -w, write events to syslog
+-       -A, --advertise=media,...   advertise only specified media
+-       -F, --force=media           force specified media technology
+-media: 100baseT4, 100baseTx-FD, 100baseTx-HD, 10baseT-FD, 10baseT-HD,
+-       (to advertise both HD and FD) 100baseTx, 10baseT\n";
++const char *usage = 
++"usage: %s [-VvRrwl] [-A media,... | -F media] [interface ...]\n"
++"       -V, --version               display version information\n"
++"       -v, --verbose               more verbose output\n"
++"       -R, --reset                 reset MII to poweron state\n"
++"       -r, --restart               restart autonegotiation\n"
++"       -w, --watch                 monitor for link status changes\n"
++"       -l, --log                   with -w, write events to syslog\n"
++"       -A, --advertise=media,...   advertise only specified media\n"
++"       -F, --force=media           force specified media technology\n"
++"media: 100baseT4, 100baseTx-FD, 100baseTx-HD, 10baseT-FD, 10baseT-HD,\n"
++"       (to advertise both HD and FD) 100baseTx, 10baseT\n";
+ 
+ int main(int argc, char **argv)
+ {

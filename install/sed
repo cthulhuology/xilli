@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SED=sed-4.2.2
+
+rm -rf /tmp/$SED
+cp -R /src/$SED /tmp
+cd /tmp/$SED
+
+./configure --prefix=/ --disable-nls 
+make
+make install

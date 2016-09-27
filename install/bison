@@ -1,0 +1,12 @@
+#!/bin/bash
+
+BISON=bison-3.0.4
+
+rm -rf /tmp/$BISON
+cp -R /src/$BISON /tmp
+cd /tmp/$BISON
+
+autoreconf -f -i
+./configure --disable-nls
+make
+make install

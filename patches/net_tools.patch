@@ -1,0 +1,34 @@
+diff -ruN /src/net-tools-1.60/lib/inet6_gr.c /tmp/net-tools-1.60/lib/inet6_gr.c
+--- /src/net-tools-1.60/lib/inet6_gr.c	2016-09-26 21:09:41.028837794 +0000
++++ /tmp/net-tools-1.60/lib/inet6_gr.c	2016-09-26 21:25:25.368881007 +0000
+@@ -142,6 +142,7 @@
+     long tstamp, expire, ndflags, reachable, stale, delete;
+     FILE *fp = fopen(_PATH_PROCNET_NDISC, "r");
+     char addr6p[8][5], haddrp[6][3];
++    long HZ = sysconf(_SC_CLK_TCK);
+ 
+     if (!fp) {
+ 	ESYSNOT("nd_print", "ND Table");
+diff -ruN /src/net-tools-1.60/lib/inet_sr.c /tmp/net-tools-1.60/lib/inet_sr.c
+--- /src/net-tools-1.60/lib/inet_sr.c	2016-09-26 21:09:41.028837794 +0000
++++ /tmp/net-tools-1.60/lib/inet_sr.c	2016-09-26 21:26:25.429646270 +0000
+@@ -61,7 +61,7 @@
+     struct rtentry rt;
+     char target[128], gateway[128] = "NONE", netmask[128] = "default";
+     int xflag, isnet;
+-
++    long HZ = sysconf(_SC_CLK_TCK);
+     xflag = 0;
+ 
+     if (!strcmp(*args, "#net")) {
+diff -ruN /src/net-tools-1.60/netstat.c /tmp/net-tools-1.60/netstat.c
+--- /src/net-tools-1.60/netstat.c	2016-09-26 21:09:41.032837845 +0000
++++ /tmp/net-tools-1.60/netstat.c	2016-09-26 21:25:05.052622147 +0000
+@@ -714,6 +714,7 @@
+ #else
+     struct sockaddr_in localaddr, remaddr;
+ #endif
++    long HZ = sysconf(_SC_CLK_TCK);
+ 
+     if (lnr == 0)
+ 	return;

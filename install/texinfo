@@ -1,0 +1,11 @@
+#!/bin/bash
+
+TEXINFO=texinfo-6.3
+
+rm -rf /tmp/$TEXINFO
+cp -R /src/$TEXINFO /tmp
+cd /tmp/$TEXINFO
+
+./configure --disable-nls --prefix=/
+make
+make install

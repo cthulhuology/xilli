@@ -1,0 +1,53 @@
+diff -ruN /src/iproute2-4.7.0/Makefile /tmp/iproute2-4.7.0/Makefile
+--- /src/iproute2-4.7.0/Makefile	2016-09-24 04:04:11.758616462 +0000
++++ /tmp/iproute2-4.7.0/Makefile	2016-09-26 17:31:14.677287719 +0000
+@@ -9,7 +9,6 @@
+ DATADIR?=$(PREFIX)/share
+ DOCDIR?=$(DATADIR)/doc/iproute2
+ MANDIR?=$(DATADIR)/man
+-ARPDDIR?=/var/lib/arpd
+ KERNEL_INCLUDE?=/usr/include
+ BASH_COMPDIR?=$(DATADIR)/bash-completion/completions
+ 
+@@ -62,7 +61,6 @@
+ install: all
+ 	install -m 0755 -d $(DESTDIR)$(SBINDIR)
+ 	install -m 0755 -d $(DESTDIR)$(CONFDIR)
+-	install -m 0755 -d $(DESTDIR)$(ARPDDIR)
+ 	install -m 0755 -d $(DESTDIR)$(DOCDIR)/examples
+ 	install -m 0755 -d $(DESTDIR)$(DOCDIR)/examples/diffserv
+ 	install -m 0644 README.iproute2+tc $(shell find examples -maxdepth 1 -type f) \
+diff -ruN /src/iproute2-4.7.0/include/linux/if_bridge.h /tmp/iproute2-4.7.0/include/linux/if_bridge.h
+--- /src/iproute2-4.7.0/include/linux/if_bridge.h	2016-09-24 04:04:11.770616610 +0000
++++ /tmp/iproute2-4.7.0/include/linux/if_bridge.h	2016-09-26 17:31:37.277576962 +0000
+@@ -15,7 +15,6 @@
+ 
+ #include <linux/types.h>
+ #include <linux/if_ether.h>
+-#include <linux/in6.h>
+ 
+ #define SYSFS_BRIDGE_ATTR	"bridge"
+ #define SYSFS_BRIDGE_FDB	"brforward"
+diff -ruN /src/iproute2-4.7.0/include/linux/netfilter.h /tmp/iproute2-4.7.0/include/linux/netfilter.h
+--- /src/iproute2-4.7.0/include/linux/netfilter.h	2016-09-24 04:04:11.774616660 +0000
++++ /tmp/iproute2-4.7.0/include/linux/netfilter.h	2016-09-26 17:32:12.822031869 +0000
+@@ -4,8 +4,6 @@
+ #include <linux/types.h>
+ 
+ #include <linux/sysctl.h>
+-#include <linux/in.h>
+-#include <linux/in6.h>
+ 
+ /* Responses from hook functions. */
+ #define NF_DROP 0
+diff -ruN /src/iproute2-4.7.0/include/linux/xfrm.h /tmp/iproute2-4.7.0/include/linux/xfrm.h
+--- /src/iproute2-4.7.0/include/linux/xfrm.h	2016-09-24 04:04:11.778616709 +0000
++++ /tmp/iproute2-4.7.0/include/linux/xfrm.h	2016-09-26 17:31:44.337667319 +0000
+@@ -1,7 +1,6 @@
+ #ifndef _LINUX_XFRM_H
+ #define _LINUX_XFRM_H
+ 
+-#include <linux/in6.h>
+ #include <linux/types.h>
+ 
+ /* All of the structures in this file may not change size as they are

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+AUTOMAKE=automake-1.15
+
+rm -rf /tmp/$AUTOMAKE
+cp -R /src/$AUTOMAKE /tmp
+cd /tmp/$AUTOMAKE
+
+autoreconf -f -i
+./configure --prefix=/
+
+patch -p0 </patches/automake.patch
+
+make
+make install

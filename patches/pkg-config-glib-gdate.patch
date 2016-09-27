@@ -1,0 +1,28 @@
+2488a2489,2515
+>   while (TRUE)
+>     {
+>       tmpbuf = g_malloc (tmpbufsize);
+> 
+>       /* Set the first byte to something other than '\0', to be able to
+>        * recognize whether strftime actually failed or just returned "".
+>        */
+>       tmpbuf[0] = '\1';
+>       tmplen = strftime (tmpbuf, tmpbufsize, locale_format, &tm);
+> 
+>       if (tmplen == 0 && tmpbuf[0] != '\0')
+>         {
+>           g_free (tmpbuf);
+>           tmpbufsize *= 2;
+> 
+>           if (tmpbufsize > 65536)
+>             {
+>               g_warning (G_STRLOC "Maximum buffer size for g_date_strftime exceeded: giving up\n");
+>               g_free (locale_format);
+> 
+>               s[0] = '\0';
+>               return 0;
+>             }
+>         }
+>       else
+>         break;
+>     }
